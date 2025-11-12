@@ -15,6 +15,8 @@ import ChairmanMessage from './Components/ChairmanMessage';
 import CEOMessage from './Components/CEOMessage';
 import VisionMission from './Components/Vission';
 import ServicesPage from './Components/Services';
+import ProjectFeaturesAndValues from './Components/Features/ProjectFeaturesAndValues';
+import BoardOfDirectors from './Components/Features/BoardOfDirectors';
 
 
 function App() {
@@ -36,7 +38,8 @@ function App() {
         <Route path='/ceo-message' element={<CEOMessage />}>CeoMessage</Route>
         <Route path='/vission' element={<VisionMission />}>Vission</Route>
         <Route path='/services' element={<ServicesPage />}>Services</Route>
- 
+        <Route path='/company-values' element={<ProjectFeaturesAndValues />}>Company Values</Route>
+        <Route path='/board-of-directors' element={<BoardOfDirectors />}>Company Values</Route>
 
       </Routes>
       <Footer></Footer>

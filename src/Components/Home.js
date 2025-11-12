@@ -9,6 +9,8 @@ import WhyChooseSection from './WhyChooseSection';
 import Features from './Features/Features';
 import ContributingSection from './Features/ContributingSection';
 import ImageGallery from './Features/ImageGallery';
+import FeatureGridInline from './Features/FeatureGridInline';
+import AlHamraFacilities from './Features/AlHamraFacilities';
 
 const sectionVariants = {
     hidden: { opacity: 0, y: 50 },
@@ -64,8 +66,8 @@ const Home = () => {
                 <ImageGallery />
             </motion.div>
 
-            {/* Health Card Section */}
-            {/* <motion.div
+      
+            <motion.div
                 initial="hidden"
                 whileInView="visible"
                 viewport={{ once: true }}
@@ -73,19 +75,18 @@ const Home = () => {
                 transition={{ duration: 0.8, delay: 0.8 }}
                 className="  p-10"
             >
-                <HealthCardSection />
-            </motion.div> */}
+                <FeatureGridInline />
+            </motion.div>
 
-            {/* Why Choose Us Section */}
-            {/* <motion.div
+            <motion.div
                 initial="hidden"
                 whileInView="visible"
                 viewport={{ once: true }}
                 variants={sectionVariants}
                 transition={{ duration: 0.8, delay: 1 }}
             >
-                <WhyChooseSection />
-            </motion.div> */}
+                <AlHamraFacilities />
+            </motion.div>
 
         </div>
     );

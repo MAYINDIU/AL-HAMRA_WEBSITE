@@ -5,7 +5,7 @@ import {
     // New Real Estate-Relevant Icons
     FaBuilding, FaKey, FaHandshake, FaMoneyBillAlt 
 } from 'react-icons/fa';
-import Logo from "../../Assets/Icons/logo.png";
+import Logo from "../../Assets/Icons/logo1.png";
 
 const Footer = () => {
     const [showScroll, setShowScroll] = useState(false);

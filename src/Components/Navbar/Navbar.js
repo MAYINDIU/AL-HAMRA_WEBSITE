@@ -11,9 +11,10 @@ import {
     FaInstagram,
     FaYoutube,
     FaChevronDown,
+    FaHandshake, // New icon for Values/Trust
 } from "react-icons/fa";
 import { HiMenuAlt3, HiX } from "react-icons/hi";
-import { BsPersonLinesFill, BsFillLightbulbFill, BsShieldFill, BsStarFill } from "react-icons/bs";
+import { BsPersonLinesFill, BsFillLightbulbFill, BsStarFill } from "react-icons/bs"; // BsPersonLinesFill imported
 import logoStandard from "../../Assets/Icons/logo.png";
 
 // --- THEME CONSTANTS (Centralized) ---
@@ -34,23 +35,22 @@ const MAIN_HOVER_BG = customStyles['bg-main-hover'];
 const Navbar = () => {
     const [scrolled, setScrolled] = useState(false);
     const [isOpen, setIsOpen] = useState(false);
-    // NEW STATE: Tracks if the mega-menu is explicitly opened by a click
     const [isDropdownOpen, setIsDropdownOpen] = useState(false); 
     const location = useLocation();
 
     useEffect(() => {
         const handleScroll = () => {
             setScrolled(window.scrollY > 10);
-            // Close the dropdown when scrolling starts (good UX)
             if (window.scrollY > 10) {
-                setIsDropdownOpen(false);
+                // Close desktop dropdown when scrolling starts
+                setIsDropdownOpen(false); 
             }
         };
         window.addEventListener("scroll", handleScroll);
         return () => window.removeEventListener("scroll", handleScroll);
     }, []);
     
-    // NEW EFFECT: Closes dropdown if user clicks outside of the menu
+    // EFFECT: Closes dropdown if user clicks outside of the menu
     useEffect(() => {
         const handleClickOutside = (event) => {
             if (isDropdownOpen && !event.target.closest('.group-about-us')) {
@@ -61,44 +61,52 @@ const Navbar = () => {
         return () => document.removeEventListener('mousedown', handleClickOutside);
     }, [isDropdownOpen]);
     
-    // NEW EFFECT: Closes dropdown on route change
+    // EFFECT: Closes dropdown on route change
     useEffect(() => {
         setIsDropdownOpen(false);
-        setIsOpen(false); // Also close mobile menu
+        setIsOpen(false);
     }, [location.pathname]);
 
 
-    // --- Mega Menu Structure for "About Us" (2-column display) ---
-    const aboutMegaMenuContent = [
-        {
-            title: "Foundation & Leadership",
-            items: [
-                { name: "About Us", to: "/about-us", icon: <BsStarFill size={16} /> },
-                { name: "Our Vision & Mission", to: "/vission", icon: <BsFillLightbulbFill size={16} /> },
-                { name: "Message from Chairman", to: "/chairman-message", icon: <BsPersonLinesFill size={16} /> },
-                { name: "Message from CEO", to: "/ceo-message", icon: <BsPersonLinesFill size={16} /> },
-            ]
+    // --- UPDATED: Simple Dropdown Structure for "About Us" with Board of Directors ---
+    const aboutDropdownContent = [
+        { 
+            name: "About Us", 
+            to: "/about-us", 
+            icon: <BsStarFill size={16} />, 
+            isHeader: false 
         },
-        {
-            title: "Policies & Initiatives",
-            items: [
-                { name: "Quality Assurance", to: "/quality", icon: <BsShieldFill size={16} /> },
-                { name: "CSR Initiatives", to: "/csr", icon: <FaBlog size={16} /> },
-                { name: "Investor Relations", to: "/investors", icon: <FaServicestack size={16} /> },
-                { name: "Career Opportunities", to: "/careers", icon: <BsPersonLinesFill size={16} /> },
-            ]
+        // NEW ITEM ADDED HERE
+        { 
+            name: "Board of Directors", 
+            to: "/board-of-directors", 
+            icon: <BsPersonLinesFill size={16} />, 
+            isHeader: false 
+        },
+        { 
+            name: "Our Vision & Mission", 
+            to: "/vission", 
+            icon: <BsFillLightbulbFill size={16} />, 
+            isHeader: false 
+        },
+        { 
+            name: "Our Company Values", 
+            to: "/company-values", 
+            icon: <FaHandshake size={16} />, 
+            isHeader: false 
         },
     ];
 
-    const aboutItems = aboutMegaMenuContent.flatMap(section => section.items);
+    const aboutItems = aboutDropdownContent.filter(item => !item.isHeader);
 
     // Main menu items 
     const menuItems = [
         { name: "Home", to: "/", icon: <FaHome size={16} /> },
-        { name: "About Us", to: "/about-us", dropdown: aboutItems, isMega: true },
-        { name: "Our Services", to: "/services", icon: <FaServicestack size={16} /> },
-        { name: "Gallery", to: "/gallery", icon: <FaBlog size={16} /> },
-        { name: "Contact", to: "/contact-us", icon: <FaEnvelope size={16} /> },
+        // Updated: Dropdown key now uses the updated list
+        { name: "About Us", to: "/about-us", dropdown: aboutDropdownContent, isMega: false }, 
+        { name: "Our Services", to: "#", icon: <FaServicestack size={16} /> },
+        { name: "Gallery", to: "#", icon: <FaBlog size={16} /> },
+        { name: "Contact Us", to: "/contact-us", icon: <FaEnvelope size={16} /> },
     ];
 
     const socialLinks = [
@@ -117,22 +125,18 @@ const Navbar = () => {
     const getLinkClasses = (to) => {
         const isActive = isActiveMenu(to);
 
-        // Active state: BOLD RED text, Thick RED Bottom Border
         if ((to === "/about-us" && isAboutActive) || isActive) {
             return `flex items-center gap-1 px-5 py-3 transition font-bold text-lg text-red-700 border-b-4 border-red-700 hover:no-underline`;
         }
 
-        // Default/Hover: Default gray text, hover RED text, subtle RED BG on hover (for the "ripple")
         return `flex items-center gap-1 px-5 py-3 rounded-lg transition font-medium text-lg ${DEFAULT_TEXT_COLOR} hover:text-red-600 ${MAIN_HOVER_BG} border-b-4 border-transparent hover:no-underline`;
     };
 
     // 2. Desktop Dropdown Button Classes
     const getDropdownButtonClasses = () => {
-        // Active state: BOLD RED text, Thick RED Bottom Border
         if (isAboutActive || isDropdownOpen) {
             return `flex items-center gap-1 px-5 py-3 transition font-bold text-lg text-red-700 border-b-4 border-red-700 hover:no-underline`;
         }
-        // Default/Hover: Default gray text, hover RED text, subtle RED BG on hover
         return `flex items-center gap-1 px-5 py-3 rounded-lg transition font-medium text-lg ${DEFAULT_TEXT_COLOR} hover:text-red-600 ${MAIN_HOVER_BG} border-b-4 border-transparent hover:no-underline`;
     }
 
@@ -140,12 +144,10 @@ const Navbar = () => {
     const getSubLinkClasses = (to) => {
         const isActive = isActiveMenu(to);
 
-        // Active state: RED text, BOLD font, subtle RED BG on hover
         if (isActive) {
             return `flex items-center gap-2 px-3 py-2 text-base rounded-md transition font-bold text-red-700 bg-red-100 hover:bg-red-200 hover:no-underline`;
         }
 
-        // Default state: Default gray text, hover RED text, subtle RED BG on hover
         return `flex items-center gap-2 px-3 py-2 text-base rounded-md transition ${DEFAULT_TEXT_COLOR} hover:text-red-700 hover:bg-red-50 hover:no-underline`;
     }
 
@@ -170,7 +172,7 @@ const Navbar = () => {
 
                     {/* Desktop Menu */}
                     <div className="hidden lg:flex space-x-1 items-center">
-                        {menuItems.map(({ name, to, icon, dropdown, isMega }) =>
+                        {menuItems.map(({ name, to, icon, dropdown }) =>
                             dropdown ? (
                                 // Added the unique class 'group-about-us' for click-outside detection
                                 <div key={name} className="relative group group-about-us"> 
@@ -182,59 +184,39 @@ const Navbar = () => {
                                     >
                                         {name}
                                         <FaChevronDown
-                                            // Conditional rotation and color based on active route OR open state
                                             className={`w-3 h-3 ml-2 transition-transform duration-300 ${isAboutActive || isDropdownOpen ? 'rotate-180 text-red-700' : 'group-hover:text-red-600'}`}
                                             style={{ color: isAboutActive || isDropdownOpen ? customStyles['--color-hover-text'] : PRIMARY_COLOR }}
                                         />
                                     </button>
 
-                                    {/* MEGA MENU: Conditional rendering based on isDropdownOpen state */}
-                                    {isDropdownOpen && isMega ? (
+                                    {/* DROPDOWN MENU (Simplified Single Column) */}
+                                    {isDropdownOpen && (
                                         <div
-                                            className="absolute left-1/2 -translate-x-1/2 mt-0 pt-4 w-[560px] bg-gray-100 shadow-2xl rounded-xl opacity-100 transform translate-y-0 transition duration-300 ease-out overflow-hidden z-20 border border-t-4 p-8"
+                                            className="absolute left-1/2 -translate-x-1/2 mt-0 pt-3 w-64 bg-gray-100 shadow-2xl rounded-xl opacity-100 transform translate-y-0 transition duration-300 ease-out overflow-hidden z-20 border border-t-4 p-3 space-y-1"
                                             style={{ borderTopColor: PRIMARY_COLOR }}
                                         >
-                                            <div className="grid grid-cols-2 gap-x-10 gap-y-4">
-                                                {aboutMegaMenuContent.map((section) => (
-                                                    <div key={section.title}>
-                                                        <h4
-                                                            className="text-sm font-extrabold mb-4 uppercase tracking-wider pb-1 border-b-2 border-red-100"
-                                                            style={{ color: PRIMARY_COLOR }}
-                                                        >
-                                                            {section.title}
-                                                        </h4>
-                                                        <div className="space-y-1">
-                                                            {section.items.map((item) => (
-                                                                <NavLink
-                                                                    key={item.to}
-                                                                    to={item.to}
-                                                                    className={getSubLinkClasses(item.to)}
-                                                                    onClick={() => setIsDropdownOpen(false)} // Close on sub-link click
-                                                                >
-                                                                    <span className="text-red-500">{item.icon}</span>
-                                                                    <span>{item.name}</span>
-                                                                </NavLink>
-                                                            ))}
-                                                        </div>
-                                                    </div>
-                                                ))}
-                                            </div>
-                                        </div>
-                                    ) : isDropdownOpen ? (
-                                        // Regular Dropdown (Used for demonstration if isMega was false)
-                                        <div className="absolute left-0 mt-3 w-64 bg-gray-100 shadow-xl rounded-lg opacity-100 transform translate-y-0 transition duration-300 ease-out overflow-hidden z-20 border border-gray-100">
-                                            {dropdown.map((item) => (
-                                                <NavLink
-                                                    key={item.to}
-                                                    to={item.to}
-                                                    className={getSubLinkClasses(item.to)}
-                                                    onClick={() => setIsDropdownOpen(false)} // Close on sub-link click
-                                                >
-                                                    <span className="text-red-500">{item.icon}</span> {item.name}
-                                                </NavLink>
+                                            {dropdown.map((item, index) => (
+                                                item.isHeader ? (
+                                                    <h4 
+                                                        key={index}
+                                                        className="text-xs font-extrabold uppercase tracking-wider text-gray-500 pt-3 mt-2 border-t border-gray-300 px-3"
+                                                    >
+                                                        {item.name}
+                                                    </h4>
+                                                ) : (
+                                                    <NavLink
+                                                        key={item.to}
+                                                        to={item.to}
+                                                        className={getSubLinkClasses(item.to)}
+                                                        onClick={() => setIsDropdownOpen(false)} // Close on sub-link click
+                                                    >
+                                                        <span className="text-red-500">{item.icon}</span>
+                                                        <span>{item.name}</span>
+                                                    </NavLink>
+                                                )
                                             ))}
                                         </div>
-                                    ) : null}
+                                    )}
                                 </div>
                             ) : (
                                 <NavLink
@@ -309,19 +291,28 @@ const Navbar = () => {
                                         </div>
                                         <div className="pl-4 space-y-1 border-l-4 border-red-100 ml-4">
                                             {/* Mobile sub-links */}
-                                            {dropdown.map((item) => (
-                                                <NavLink
-                                                    key={item.to}
-                                                    to={item.to}
-                                                    className={`flex items-center gap-2 px-3 py-2 rounded-md transition text-base ${
-                                                        isActiveMenu(item.to)
-                                                            ? `text-red-700 font-bold bg-red-100`
-                                                            : `${DEFAULT_TEXT_COLOR} hover:text-red-700 hover:bg-red-50`
+                                            {dropdown.map((item, index) => (
+                                                item.isHeader ? (
+                                                    <h4 
+                                                        key={index}
+                                                        className="text-xs font-extrabold uppercase tracking-wider text-gray-500 pt-3 mt-2 border-t border-gray-300 px-3"
+                                                    >
+                                                        {item.name}
+                                                    </h4>
+                                                ) : (
+                                                    <NavLink
+                                                        key={item.to}
+                                                        to={item.to}
+                                                        className={`flex items-center gap-2 px-3 py-2 rounded-md transition text-base ${
+                                                            isActiveMenu(item.to)
+                                                                ? `text-red-700 font-bold bg-red-100`
+                                                                : `${DEFAULT_TEXT_COLOR} hover:text-red-700 hover:bg-red-50`
                                                         } hover:no-underline`}
-                                                    onClick={() => setIsOpen(false)}
-                                                >
-                                                    <span className="text-red-500">{item.icon}</span> {item.name}
-                                                </NavLink>
+                                                        onClick={() => setIsOpen(false)}
+                                                    >
+                                                        <span className="text-red-500">{item.icon}</span> {item.name}
+                                                    </NavLink>
+                                                )
                                             ))}
                                         </div>
                                     </>
@@ -330,11 +321,10 @@ const Navbar = () => {
                                         key={to}
                                         to={to}
                                         className={`flex items-center gap-2 px-3 py-3 rounded-md transition font-medium text-lg ${
-                                            // Mobile active state uses background for high visibility
                                             isActiveMenu(to)
                                                 ? `text-white font-bold bg-red-600 shadow-sm`
                                                 : `${DEFAULT_TEXT_COLOR} hover:text-red-600 hover:bg-red-100`
-                                            } hover:no-underline`}
+                                        } hover:no-underline`}
                                         onClick={() => setIsOpen(false)}
                                     >
                                         <span className={isActiveMenu(to) ? 'text-white' : 'text-red-500'}>{icon}</span> {name}
