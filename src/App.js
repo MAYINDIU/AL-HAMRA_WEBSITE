@@ -17,6 +17,11 @@ import VisionMission from './Components/Vission';
 import ServicesPage from './Components/Services';
 import ProjectFeaturesAndValues from './Components/Features/ProjectFeaturesAndValues';
 import BoardOfDirectors from './Components/Features/BoardOfDirectors';
+import ProjectLocationMap from './Components/Features/ProjectLocationMap';
+import ProjectAmenities from './Components/Features/ProjectAmenities';
+import TermsAndConditions from './Components/Features/Termsconditions';
+import MyInformation from './Components/Features/MyInformation';
+import OurProducts from './Components/Features/OurProducts';
 
 
 function App() {
@@ -40,6 +45,13 @@ function App() {
         <Route path='/services' element={<ServicesPage />}>Services</Route>
         <Route path='/company-values' element={<ProjectFeaturesAndValues />}>Company Values</Route>
         <Route path='/board-of-directors' element={<BoardOfDirectors />}>Company Values</Route>
+        <Route path='/project-location-map' element={<ProjectLocationMap />}>Project Locations</Route>  
+        <Route path='/project-amenities' element={<ProjectAmenities />}>Company Values</Route>  
+        <Route path='/terms-conditions' element={<TermsAndConditions />}>Company Values</Route>  
+        <Route path='/my-information' element={<MyInformation />}>My Information</Route>  
+ 
+       <Route path='/our-products' element={<OurProducts />}>My Products</Route>  
+
 
       </Routes>
       <Footer></Footer>

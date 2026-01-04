@@ -9,6 +9,7 @@ import Image5 from '../../Assets/Galary/5.jpg';
 import Image6 from '../../Assets/Galary/6.jpg';
 import Image7 from '../../Assets/Galary/5.jpg'; // ডুপ্লিকেট ইমেজ রিপ্লেস করা উচিত
 import Image8 from '../../Assets/Galary/6.jpg'; // ডুপ্লিকেট ইমেজ রিপ্লেস করা উচিত
+
 import { FaExpand, FaArrowLeft, FaArrowRight, FaTimes } from 'react-icons/fa'; // নতুন আইকন ইমপোর্ট
 
 const galleryImages = [
